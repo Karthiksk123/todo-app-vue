@@ -28,9 +28,10 @@ export default {
     editTask(index) {
       this.task = this.tasks[index].name;
       this.editableTask = index;
+      this.passData();
     },
     submitTask() {
-      if (this.task.length === 0) {
+      if (this.task === "") {
         return new Error("Task name must be more than 0 charecters");
       } else if (this.editableTask != null) {
         this.tasks[this.editableTask].name = this.task;
@@ -44,6 +45,9 @@ export default {
         this.task = "";
       }
     },
+    passData() {
+      this.$emit("passTitle", this.task);
+    },
   },
 };
 </script>
@@ -51,7 +55,7 @@ export default {
 <template>
   <div class="page-area">
     <div class="input-area">
-      <h1 v-if="editableTask">Edit Task</h1>
+      <h1 v-if="editableTask">Edit Task {{ task }}</h1>
       <h1 v-else></h1>
       <input type="text" placeholder="Enter a todo..." v-model="task" />
       <button @click="submitTask" class="sub-btn">Save</button>
@@ -67,9 +71,9 @@ export default {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(task, index) in tasks" :key="index">
-            <td>{{ task.id }}</td>
-            <td>{{ task.name }}</td>
+          <tr v-for="({ id, name }, index) in tasks" :key="index">
+            <td>{{ id }}</td>
+            <td>{{ name }}</td>
             <td>
               <button @click="editTask(index)" class="edit-btn">Edit</button>
             </td>

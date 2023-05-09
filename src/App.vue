@@ -1,14 +1,31 @@
-<script setup>
-import Nav from "./components/Nav.vue";
-import TodoPage from "./components/TodoPage.vue";
-</script>
-
 <template>
   <div class="app-container">
-    <Nav />
-    <TodoPage />
+    <Nav :newTitle="title" />
+    <TodoPage @passTitle="changeTitle($event)" />
   </div>
 </template>
+
+<script>
+import Nav from "./components/Nav.vue";
+import TodoPage from "./components/TodoPage.vue";
+
+export default {
+  data() {
+    return {
+      title: "",
+    };
+  },
+  components: {
+    Nav,
+    TodoPage,
+  },
+  methods: {
+    changeTitle(e) {
+      this.title = e;
+    },
+  },
+};
+</script>
 
 <style scoped>
 .app-container {

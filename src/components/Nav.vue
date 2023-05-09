@@ -1,7 +1,15 @@
-<script></script>
+<script>
+export default {
+  props: {
+    newTitle: String,
+  },
+};
+</script>
 
 <template>
-  <div><h1 class="title">Todo App</h1></div>
+  <div>
+    <h1 class="title">Todo App {{ newTitle }}</h1>
+  </div>
 </template>
 
 <style scoped>
