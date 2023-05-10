@@ -54,7 +54,7 @@ export default {
   },
   computed: {
     filteredList() {
-      if (this.tasks !== undefined) {
+      if (this.tasks) {
         return this.tasks.filter((data) => {
           return data.name
             .toLowerCase()
