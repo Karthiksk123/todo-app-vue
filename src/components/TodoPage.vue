@@ -48,7 +48,7 @@ export default {
       task: "",
       editableTask: null,
       id: 0,
-      tasks: [],
+      tasks: JSON.parse(localStorage.getItem("todoData")) || [],
       searchInput: "",
       sampleData: [
         {
@@ -64,7 +64,7 @@ export default {
   },
   mounted() {
     if (!this.tasks) {
-      this.tasks = localStorage.setItem("todoData", this.tasks);
+      this.tasks = localStorage.setItem("todoData", JSON.stringify(this.tasks));
     }
   },
   computed: {
