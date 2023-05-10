@@ -54,10 +54,13 @@ export default {
   },
   computed: {
     filteredList() {
-      
-      return this.tasks.filter((data) => {
-        return data.name.toLowerCase().includes(this.searchInput.toLowerCase());
-      });
+      if (this.tasks.length > 0) {
+        return this.tasks.filter((data) => {
+          return data.name
+            .toLowerCase()
+            .includes(this.searchInput.toLowerCase());
+        });
+      }
     },
   },
   methods: {
