@@ -5,25 +5,25 @@ export default {
       task: "",
       editableTask: null,
       id: 0,
-      tasks: [
-        {
-          name: "Task 1",
-          id: Date.now() + 1,
-        },
-        {
-          name: "Task 2",
-          id: Date.now() + 2,
-        },
-        {
-          name: "Task 3",
-          id: Date.now() + 3,
-        },
-      ],
+      tasks: JSON.parse(localStorage.getItem("todoData")),
+      searchInput: "",
     };
+  },
+  computed: {
+    filteredList() {
+      return this.tasks.filter((data) => {
+        return data.name.toLowerCase().includes(this.searchInput.toLowerCase());
+      });
+    },
   },
   methods: {
     deleteTask(index) {
-      this.tasks.splice(index, 1);
+      if (this.editableTask != null) {
+        return;
+      } else {
+        this.tasks.splice(index, 1);
+      }
+      localStorage.setItem("todoData", JSON.stringify(this.tasks));
     },
     editTask(index) {
       this.task = this.tasks[index].name;
@@ -31,8 +31,8 @@ export default {
       this.passData();
     },
     submitTask() {
-      if (this.task === "") {
-        return new Error("Task name must be more than 0 charecters");
+      if (!this.task.trim()) {
+        return;
       } else if (this.editableTask != null) {
         this.tasks[this.editableTask].name = this.task;
         this.editableTask = null;
@@ -43,7 +43,9 @@ export default {
           id: Date.now() + 4,
         });
         this.task = "";
+        this.passData();
       }
+      localStorage.setItem("todoData", JSON.stringify(this.tasks));
     },
     passData() {
       this.$emit("passTitle", this.task);
@@ -60,7 +62,12 @@ export default {
       <input type="text" placeholder="Enter a todo..." v-model="task" />
       <button @click="submitTask" class="sub-btn">Save</button>
     </div>
-    <div>
+    <div style="padding-top: 20px; display: flex">
+      <input type="text" placeholder="Search a todo" v-model="searchInput" />
+      <!-- <button @click="filterData" class="sub-btn">Search</button> -->
+    </div>
+
+    <div v-if="filteredList.length > 0">
       <table>
         <thead>
           <tr>
@@ -71,9 +78,9 @@ export default {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="({ id, name }, index) in tasks" :key="index">
-            <td>{{ id }}</td>
-            <td>{{ name }}</td>
+          <tr v-for="(data, index) in filteredList" :key="index">
+            <td>{{ data.id }}</td>
+            <td>{{ data.name }}</td>
             <td>
               <button @click="editTask(index)" class="edit-btn">Edit</button>
             </td>
@@ -84,6 +91,9 @@ export default {
         </tbody>
       </table>
     </div>
+    <h3 v-else="" tasks.length="0" style="padding-top: 40px">
+      No Todos Here ...
+    </h3>
   </div>
 </template>
 
@@ -103,7 +113,7 @@ export default {
   background-color: #dddddd;
 }
 
-.input-area > input {
+input {
   padding: 10px;
   background-color: aliceblue;
   border: #dddddd;
@@ -111,11 +121,11 @@ export default {
   font-size: medium;
 }
 
-.input-area > input:focus {
+input:focus {
   outline: none;
 }
 
-.input-area > button {
+button {
   padding: 10px;
   background-color: aliceblue;
   border: #dddddd;
