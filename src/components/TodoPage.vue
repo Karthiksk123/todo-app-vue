@@ -62,10 +62,15 @@ export default {
       ],
     };
   },
+  mounted() {
+    if (!this.tasks) {
+      this.tasks = localStorage.setItem("todoData", this.tasks);
+    }
+  },
   computed: {
     filteredList() {
-      console.log(this.tasks.length)
-       if (this.tasks != undefined) {
+      console.log(this.tasks.length);
+      if (this.tasks != undefined) {
         return this.tasks.filter((data) => {
           return data.name
             .toLowerCase()
