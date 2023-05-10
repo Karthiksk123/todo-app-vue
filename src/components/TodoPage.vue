@@ -48,7 +48,7 @@ export default {
       task: "",
       editableTask: null,
       id: 0,
-      tasks: [] || JSON.parse(localStorage.getItem("todoData")),
+      tasks: [],
       searchInput: "",
       sampleData: [
         {
@@ -64,9 +64,8 @@ export default {
   },
   computed: {
     filteredList() {
-      if (this.tasks.length = 0) {
-        localStorage.setItem("todoData", JSON.stringify(this.sampleData));
-      } else if (this.tasks != undefined) {
+      console.log(this.tasks.length)
+       if (this.tasks != undefined) {
         return this.tasks.filter((data) => {
           return data.name
             .toLowerCase()
