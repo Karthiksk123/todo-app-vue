@@ -4,9 +4,10 @@ export const useTodoStore = defineStore({
   id: "todoStore",
   state: () => ({
     task: "",
-    editableTask: null,
+    editableTask: false,
     tasks: JSON.parse(localStorage.getItem("todoData")) || [],
     searchInput: "",
+    todoMode: true,
   }),
   getters: {
     filteredList() {
@@ -17,6 +18,15 @@ export const useTodoStore = defineStore({
             .includes(this.searchInput.toLowerCase());
         });
       }
+    },
+    InputType() {
+      console.log("current", this.todoMode);
+      if (this.todoMode) {
+        return this.task;
+      } else {
+        return this.searchInput;
+      }
+      console.log("after", this.todoMode);
     },
   },
   actions: {
@@ -32,6 +42,7 @@ export const useTodoStore = defineStore({
     editTask(index) {
       this.task = this.tasks[index].name;
       this.editableTask = index;
+      this.todoMode = true;
       this.passData();
     },
     submitTask() {

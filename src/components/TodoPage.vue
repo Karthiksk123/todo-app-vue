@@ -1,15 +1,48 @@
 <template>
-  <div class="page-area">
-    <div class="input-area ">
+  <div class="page-area mt-24">
+    <div class="input-area">
       <h1 v-if="editableTask">Edit Task {{ task }}</h1>
       <h1 v-else></h1>
-      <input type="text" placeholder="Enter a todo..." v-model="task" />
-      <button @click="submitTask" class="sub-btn">Save</button>
+      <div class="flex rounded-md p-4">
+        <label class="flex bg-blue-100 items-center rounded-md">
+          <input
+            type="text"
+            placeholder="Enter a todo"
+            v-model="task"
+            v-if="todoMode"
+            @keyup.enter="submitTask"
+          />
+          <input
+            type="text"
+            placeholder="Search todo ..."
+            v-model="searchInput"
+            v-if="!todoMode"
+          />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-8 h-8 bg-transparent mx-1"
+            @click="todoMode = !todoMode"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+            />
+          </svg>
+        </label>
+        <button @click="submitTask" class="sub-btn">
+          {{ editableTask ? "Save" : !todoMode ? "Cancel" : "Save" }}
+        </button>
+      </div>
     </div>
-    <div style="padding-top: 20px; display: flex">
+    <!-- <div style="padding-top: 20px; display: flex">
       <input type="text" placeholder="Search a todo" v-model="searchInput" />
-      <!-- <button @click="filterData" class="sub-btn">Search</button> -->
-    </div>
+      <button @click="filterData" class="sub-btn">Search</button>
+    </div> -->
 
     <div v-if="filteredList.length > 0">
       <table>
@@ -48,8 +81,15 @@ export default {
     //store
     const todoStore = useTodoStore();
 
-    const { task, tasks, editableTask, searchInput, filteredList } =
-      storeToRefs(todoStore);
+    const {
+      task,
+      tasks,
+      editableTask,
+      searchInput,
+      filteredList,
+      InputType,
+      todoMode,
+    } = storeToRefs(todoStore);
 
     const { deleteTask, editTask, submitTask } = todoStore;
 
@@ -62,6 +102,8 @@ export default {
       deleteTask,
       editTask,
       submitTask,
+      InputType,
+      todoMode,
     };
   },
 };
@@ -70,7 +112,7 @@ export default {
 <style scoped>
 .page-area {
   width: 100%;
-  height: 80vh;
+  height: max-content;
   display: flex;
   flex-direction: column;
   justify-content: center;
