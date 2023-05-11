@@ -35,84 +35,34 @@
         </tbody>
       </table>
     </div>
-    <h3 v-else="" tasks.length="0" style="padding-top: 40px">
-      No Todos Here ...
-    </h3>
+    <h3 v-else="" style="padding-top: 40px">No Todos Here ...</h3>
   </div>
 </template>
 
 <script>
+import { useTodoStore } from "../Strore/useTodoStore";
+import { storeToRefs } from "pinia";
+
 export default {
-  data() {
+  setup() {
+    //store
+    const todoStore = useTodoStore();
+
+    const { task, tasks, editableTask, searchInput, filteredList } =
+      storeToRefs(todoStore);
+
+    const { deleteTask, editTask, submitTask } = todoStore;
+
     return {
-      task: "",
-      editableTask: null,
-      id: 0,
-      tasks: JSON.parse(localStorage.getItem("todoData")) || [],
-      searchInput: "",
-      sampleData: [
-        {
-          id: 1,
-          name: "First Task",
-        },
-        {
-          id: 2,
-          name: "Second Task",
-        },
-      ],
+      task,
+      tasks,
+      editableTask,
+      searchInput,
+      filteredList,
+      deleteTask,
+      editTask,
+      submitTask,
     };
-  },
-  mounted() {
-    if (!this.tasks) {
-      this.tasks = localStorage.setItem("todoData", JSON.stringify(this.tasks));
-    }
-  },
-  computed: {
-    filteredList() {
-      console.log(this.tasks.length);
-      if (this.tasks != undefined) {
-        return this.tasks.filter((data) => {
-          return data.name
-            .toLowerCase()
-            .includes(this.searchInput.toLowerCase());
-        });
-      }
-    },
-  },
-  methods: {
-    deleteTask(index) {
-      if (this.editableTask != null) {
-        return;
-      } else {
-        this.tasks.splice(index, 1);
-      }
-      localStorage.setItem("todoData", JSON.stringify(this.tasks));
-    },
-    editTask(index) {
-      this.task = this.tasks[index].name;
-      this.editableTask = index;
-      this.passData();
-    },
-    submitTask() {
-      if (!this.task.trim()) {
-        return;
-      } else if (this.editableTask != null) {
-        this.tasks[this.editableTask].name = this.task;
-        this.editableTask = null;
-        this.task = "";
-      } else {
-        this.tasks.push({
-          name: this.task,
-          id: Date.now() + 4,
-        });
-        this.task = "";
-        this.passData();
-      }
-      localStorage.setItem("todoData", JSON.stringify(this.tasks));
-    },
-    passData() {
-      this.$emit("passTitle", this.task);
-    },
   },
 };
 </script>
