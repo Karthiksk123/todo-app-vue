@@ -1,6 +1,6 @@
 <template>
   <div class="page-area">
-    <div class="input-area">
+    <div class="input-area ">
       <h1 v-if="editableTask">Edit Task {{ task }}</h1>
       <h1 v-else></h1>
       <input type="text" placeholder="Enter a todo..." v-model="task" />
