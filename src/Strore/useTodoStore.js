@@ -4,11 +4,15 @@ export const useTodoStore = defineStore({
   id: "todoStore",
   state: () => ({
     task: "",
-    editableTask: false,
-    tasks: JSON.parse(localStorage.getItem("todoData")) || [],
+    editableTask: null,
+    tasks: JSON.parse(sessionStorage.getItem("todoStore")) || [],
     searchInput: "",
     todoMode: true,
   }),
+  persist : {
+    Storage : sessionStorage,
+    paths : ['tasks']
+  },
   getters: {
     filteredList() {
       if (this.tasks != undefined) {
@@ -20,13 +24,11 @@ export const useTodoStore = defineStore({
       }
     },
     InputType() {
-      console.log("current", this.todoMode);
       if (this.todoMode) {
         return this.task;
       } else {
         return this.searchInput;
       }
-      console.log("after", this.todoMode);
     },
   },
   actions: {
@@ -37,7 +39,7 @@ export const useTodoStore = defineStore({
         this.tasks.splice(index, 1);
         this.task = "";
       }
-      localStorage.setItem("todoData", JSON.stringify(this.tasks));
+      sessionStorage.setItem("todoStore", JSON.stringify(this.tasks));
     },
     editTask(index) {
       this.task = this.tasks[index].name;
@@ -60,7 +62,7 @@ export const useTodoStore = defineStore({
         this.task = "";
         this.passData();
       }
-      localStorage.setItem("todoData", JSON.stringify(this.tasks));
+      sessionStorage.setItem("todoStore", JSON.stringify(this.tasks));
     },
     passData() {
       () => {

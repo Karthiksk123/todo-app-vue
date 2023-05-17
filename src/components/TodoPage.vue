@@ -35,7 +35,7 @@
           </svg>
         </label>
         <button @click="submitTask" class="sub-btn">
-          {{ editableTask ? "Save" : !todoMode ? "Cancel" : "Save" }}
+          {{ editableTask ? "Save" : "Cancel" }}
         </button>
       </div>
     </div>
