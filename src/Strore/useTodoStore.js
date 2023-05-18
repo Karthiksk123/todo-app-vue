@@ -9,9 +9,9 @@ export const useTodoStore = defineStore({
     searchInput: "",
     todoMode: true,
   }),
-  persist : {
-    Storage : sessionStorage,
-    paths : ['tasks']
+  persist: {
+    Storage: sessionStorage,
+    paths: ["tasks"],
   },
   getters: {
     filteredList() {
@@ -21,13 +21,6 @@ export const useTodoStore = defineStore({
             .toLowerCase()
             .includes(this.searchInput.toLowerCase());
         });
-      }
-    },
-    InputType() {
-      if (this.todoMode) {
-        return this.task;
-      } else {
-        return this.searchInput;
       }
     },
   },
